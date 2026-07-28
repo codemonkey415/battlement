@@ -101,10 +101,8 @@
 
   var CSS = [
     '.bs-ltc{--bs-gold:#FFEF00;--bs-border:rgba(255,255,255,0.09);--bs-muted:#C8C8D8;',
-    'max-width:48rem;margin:0 auto;font-family:' + BODY_F + ';box-sizing:border-box;',
-    'opacity:0;transform:translateY(2rem);transition:opacity 1s ease,transform 1s ease;transition-delay:150ms}',
+    'max-width:48rem;margin:0 auto;font-family:' + BODY_F + ';box-sizing:border-box}',
     '.bs-ltc *,.bs-ltc *::before,.bs-ltc *::after{box-sizing:border-box}',
-    '.bs-ltc.bs-in{opacity:1;transform:translateY(0)}',
     '.bs-ltc__scroll{overflow-x:auto}',
     '.bs-ltc__inner{min-width:560px}',
     '.bs-ltc__svg{width:100%;height:auto;display:block}',
@@ -365,16 +363,6 @@
     });
 
     setActive(0);
-
-    // scroll reveal
-    if ("IntersectionObserver" in window) {
-      var obs = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting) { root.classList.add("bs-in"); obs.disconnect(); }
-      }, { threshold: 0.05 });
-      obs.observe(root);
-    } else {
-      root.classList.add("bs-in");
-    }
   }
 
   // ── bootstrap ────────────────────────────────────────────
