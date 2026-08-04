@@ -85,7 +85,9 @@
     '@media (min-width:1024px){.bs-rings{grid-template-columns:1fr 1fr;gap:4rem}}',
 
     // stage (svg column)
-    '.bs-rings__stage{max-width:36rem;margin:0 auto;width:100%}',
+    '.bs-rings__stage{max-width:36rem;margin:0 auto;width:100%;opacity:0;transform:scale(.95);',
+    'transition:opacity 1s ease,transform 1s ease;transition-delay:150ms}',
+    '.bs-rings.bs-in .bs-rings__stage{opacity:1;transform:scale(1)}',
     '.bs-rings__svg{width:100%;height:auto;display:block}',
 
     // crenellation drift
@@ -105,9 +107,11 @@
     '.bs-rings__list{border:1px solid var(--bs-border)}',
     '.bs-rings__item{display:flex;align-items:flex-start;gap:1.25rem;width:100%;text-align:left;',
     'padding:1.5rem;background:transparent;border:0;border-radius:0;color:inherit;font:inherit;cursor:pointer;',
-    'transition:background-color 300ms ease}',
+    'opacity:0;transform:translateX(1.5rem);',
+    'transition:opacity 650ms ease,transform 650ms ease,background-color 300ms ease}',
     '@media (min-width:768px){.bs-rings__item{padding:1.75rem}}',
     '.bs-rings__item + .bs-rings__item{border-top:1px solid var(--bs-border)}',
+    '.bs-rings.bs-in .bs-rings__item{opacity:1;transform:translateX(0)}',
     '.bs-rings__item:hover{background:var(--bs-secondary)}',
     '.bs-rings__item[aria-pressed="true"]{background:rgba(255,239,0,.05)}',
     '.bs-rings__item:focus-visible{outline:2px solid rgba(255,239,0,.7);outline-offset:-2px}',
@@ -174,7 +178,8 @@
     var out = '<div class="bs-rings__list">';
     for (var i = 0; i < LAYERS.length; i++) {
       var l = LAYERS[i];
-      out += '<button type="button" class="bs-rings__item" data-ring="' + i + '" aria-pressed="false">' +
+      out += '<button type="button" class="bs-rings__item" data-ring="' + i + '" aria-pressed="false" ' +
+        'style="transition-delay:' + (200 + i * 90) + 'ms">' +
         '<span class="bs-rings__num"><span>' + l.n + '</span></span>' +
         '<span><span class="bs-rings__title">' + l.title + '</span>' +
         '<span class="bs-rings__body">' + l.body + '</span></span></button>';
@@ -230,6 +235,16 @@
     wire(items, false);
 
     setActive(0);
+
+    // scroll reveal
+    if ("IntersectionObserver" in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { root.classList.add("bs-in"); obs.disconnect(); }
+      }, { threshold: 0.05 });
+      obs.observe(root);
+    } else {
+      root.classList.add("bs-in");
+    }
   }
 
   // ── bootstrap ────────────────────────────────────────────
